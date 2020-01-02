@@ -1,10 +1,13 @@
 package com.example.urlsaver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,8 @@ public class UrlActivity extends AppCompatActivity {
     String uid;
     List<UrlEntry> urlEntryList;
 
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,7 @@ public class UrlActivity extends AppCompatActivity {
         save = findViewById(R.id.buttonSave);
         listViewUrlEntry = findViewById(R.id.listViewUrlEntry);
         urlEntryList = new ArrayList<>();
+        progressBar = findViewById(R.id.progressBarUrlActivity);
 
         //https://stackoverflow.com/questions/44494430/retrieve-user-data-from-firebase-database
 
@@ -74,12 +80,23 @@ public class UrlActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        if(mAuth.getCurrentUser() == null)
+        {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+        progressBar.setVisibility(View.VISIBLE);
         databaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 long n = dataSnapshot.child("data").getChildrenCount();
                 System.out.println(n);
+                if(n == 0)
+                {
+                    Toast.makeText(getApplicationContext(), "No Entries Found", Toast.LENGTH_SHORT).show();
+                }
 
                 urlEntryList.clear();
                 for (DataSnapshot urlEntrySnapshot : dataSnapshot.child("data").child("arr").getChildren()) {
@@ -95,6 +112,7 @@ public class UrlActivity extends AppCompatActivity {
                     urlEntryList.add(urlEntry);
                 }
 
+                progressBar.setVisibility(View.GONE);
 
                 UrlEntryList adapter = new UrlEntryList(UrlActivity.this, urlEntryList);
                 listViewUrlEntry.setAdapter(adapter);

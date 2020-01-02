@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             progressbar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
+                                finish();
                                 Intent intent = new Intent(MainActivity.this, UrlActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -91,5 +92,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mAuth.getCurrentUser() != null)
+        {
+            finish();
+            startActivity(new Intent(this, UrlActivity.class));
+        }
     }
 }
