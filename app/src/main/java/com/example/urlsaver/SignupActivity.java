@@ -1,5 +1,6 @@
 package com.example.urlsaver;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -54,10 +56,10 @@ public class SignupActivity extends AppCompatActivity {
                     email.setError("Please enter valid email");
                     email.requestFocus();
 
-                } else if(p.length()<6){
+                } else if (p.length() < 6) {
                     password.setError("Minimum password length should be 6");
                     password.requestFocus();
-                } else{
+                } else {
                     progressbar.setVisibility(View.VISIBLE);
                     mAuth.createUserWithEmailAndPassword(e, p).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -66,10 +68,21 @@ public class SignupActivity extends AppCompatActivity {
                             progressbar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_LONG).show();
-                            }
-                            else
-                            {
-                                Toast.makeText(getApplicationContext(),task.getException().toString(),Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(SignupActivity.this, UrlActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            } else {
+                                if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+
+                                    Toast.makeText(getApplicationContext(), "This email is already registered", Toast.LENGTH_LONG).show();
+
+                                } else {
+                                    try {
+                                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    } catch (NullPointerException e) {
+                                        e.getStackTrace();
+                                    }
+                                }
                             }
                         }
                     });
