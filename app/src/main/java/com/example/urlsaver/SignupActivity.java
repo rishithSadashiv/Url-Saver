@@ -5,6 +5,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
 
-    EditText email = findViewById(R.id.editTextEmailSignup);
-    EditText password = findViewById(R.id.editTextPasswordSignup);
-    Button signup = findViewById(R.id.buttonSignupSignup);
+    EditText email;
+    EditText password;
+    Button signup;
+    ProgressBar progressbar;
 
     private FirebaseAuth mAuth;
 
@@ -27,6 +29,11 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        email = findViewById(R.id.editTextEmailSignup);
+        password = findViewById(R.id.editTextPasswordSignup);
+        signup = findViewById(R.id.buttonSignupSignup);
+        progressbar = findViewById(R.id.progressBarSignup);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -51,12 +58,14 @@ public class SignupActivity extends AppCompatActivity {
                     password.setError("Minimum password length should be 6");
                     password.requestFocus();
                 } else{
+                    progressbar.setVisibility(View.VISIBLE);
                     mAuth.createUserWithEmailAndPassword(e, p).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
+                            progressbar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "User regisered successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "User registered successfully", Toast.LENGTH_LONG).show();
                             }
                             else
                             {

@@ -9,13 +9,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    Button login;
+    Button signup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button signup = findViewById(R.id.buttonSignupLogin);
-        Button login = findViewById(R.id.buttonLogin);
+        signup = findViewById(R.id.buttonSignupLogin);
+        login = findViewById(R.id.buttonLogin);
 
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
