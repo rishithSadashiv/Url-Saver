@@ -80,8 +80,7 @@ public class UrlActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        if(mAuth.getCurrentUser() == null)
-        {
+        if (mAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, MainActivity.class));
         }
@@ -93,8 +92,7 @@ public class UrlActivity extends AppCompatActivity {
 
                 long n = dataSnapshot.child("data").getChildrenCount();
                 System.out.println(n);
-                if(n == 0)
-                {
+                if (n == 0) {
                     Toast.makeText(getApplicationContext(), "No Entries Found", Toast.LENGTH_SHORT).show();
                 }
 

@@ -7,7 +7,7 @@ public class UrlEntry {
     String link;
     long time;
 
-    public UrlEntry(){
+    public UrlEntry() {
 
     }
 

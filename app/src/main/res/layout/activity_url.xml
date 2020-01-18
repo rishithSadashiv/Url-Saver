@@ -38,8 +38,8 @@
 
     <Button
         android:id="@+id/buttonSave"
-        android:layout_width="48dp"
-        android:layout_height="43dp"
+        android:layout_width="33dp"
+        android:layout_height="31dp"
         android:background="@drawable/save"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
