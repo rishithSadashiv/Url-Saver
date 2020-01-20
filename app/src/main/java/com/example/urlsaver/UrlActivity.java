@@ -73,7 +73,7 @@ public class UrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                UrlEntry urlEntry = new UrlEntry(description.getText().toString(), 1, link.getText().toString(),1);
+                UrlEntry urlEntry = new UrlEntry(description.getText().toString(), arr.size(), link.getText().toString(),System.currentTimeMillis()/1000L);
 
                 urlEntryList.add(urlEntry);
                 UrlEntryList adapter = new UrlEntryList(UrlActivity.this, urlEntryList);
