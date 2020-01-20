@@ -42,6 +42,8 @@ public class UrlActivity extends AppCompatActivity {
 
     ProgressBar progressBar;
 
+    ArrayList<UrlEntry> arr = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +73,16 @@ public class UrlActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                UrlEntry urlEntry = new UrlEntry(description.getText().toString(), 1, link.getText().toString(),1);
+
+                urlEntryList.add(urlEntry);
+                UrlEntryList adapter = new UrlEntryList(UrlActivity.this, urlEntryList);
+                listViewUrlEntry.setAdapter(adapter);
+                arr.add(urlEntry);
+                databaseUsers.child("data").child("arr").setValue(arr);
+                description.getText().clear();
+                link.getText().clear();
+
             }
         });
 
@@ -95,7 +107,7 @@ public class UrlActivity extends AppCompatActivity {
                 if (n == 0) {
                     Toast.makeText(getApplicationContext(), "No Entries Found", Toast.LENGTH_SHORT).show();
                 }
-
+                arr.clear();
                 urlEntryList.clear();
                 for (DataSnapshot urlEntrySnapshot : dataSnapshot.child("data").child("arr").getChildren()) {
                     System.out.println(urlEntrySnapshot.getValue());
@@ -108,6 +120,7 @@ public class UrlActivity extends AppCompatActivity {
                     //UrlEntry urlEntry = urlEntrySnapshot.getValue(UrlEntry.class);
 
                     urlEntryList.add(urlEntry);
+                    arr.add(urlEntry);
                 }
 
                 progressBar.setVisibility(View.GONE);
